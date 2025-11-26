@@ -188,3 +188,5 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email' # Log in using email, not username
 # Tells allauth to use our custom form for signups
 ACCOUNT_FORMS = {'signup': 'accounts.forms.CustomSignupForm'}
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Allow unsecured login for localhost development
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'http'

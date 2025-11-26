@@ -16,9 +16,9 @@
   <nav class="navbar">
     <div class="logo"><img src="{% static 'logos/mg.png' %}" alt="MANAGENIUS Logo"></div>
     <ul class="nav-links">
-      <li><a href="/">Home</a></li>
-      <li><a href="/about">About Us</a></li>
-      <li><a href="/events">Events</a></li>
+      <li><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="{% url 'about' %}">About Us</a></li>
+      <li><a href="{% url 'events' %}">Events</a></li>
       <li><a href="{% url 'account_login' %}" style="color: #ffd700;">Login / Sign up</a></li>
     </ul>
     <div class="hamburger"><div></div><div></div><div></div></div>
@@ -28,10 +28,13 @@
     <div class="login-container">
       <h2>Create Account</h2>
       
-      <a href="{% provider_login_url 'google' %}" class="google-btn">
-         <img src="{% static 'logos/google.jpeg' %}" alt="G" width="20" style="margin-right: 10px;">
-        Sign up with Google
-      </a>
+      <form action="{% provider_login_url 'google' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="google-btn" style="border: none; cursor: pointer; width: 100%; font-size: 1rem; font-family: Arial, sans-serif;">
+            <img src="{% static 'logos/google.jpeg' %}" alt="G" width="20" style="margin-right: 10px;">
+            Sign up with Google
+        </button>
+      </form>
 
       <div class="divider"></div>
 
