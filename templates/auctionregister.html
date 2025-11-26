@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -5,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>APL Registration - Secure Your Spot!</title>
 
-    <!-- External CSS/JS dependencies -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -16,29 +16,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Roboto:wght@400&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@studio-freight/lenis"></script>
     
-    <!-- NOTE: Firebase logic removed to fix the TypeError: t is not a function error. 
-    The QR code is now set via CSS. To change the QR code, update the URL in the .qr-image-protection style below. 
-    If you need secure, dynamic loading, please try hosting the file on a different environment. 
-    -->
-
     <style>
       /* Smooth scrolling setup */
       .lenis.lenis-smooth { scroll-behavior: auto !important; }
       .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
       .lenis.lenis-stopped { overflow: hidden; }
-      .lenis.lenis-smooth iframe { pointer-events: auto; } /* Enable interaction with the embedded form */
+      .lenis.lenis-smooth iframe { pointer-events: auto; }
 
-      /* Base body styles - Matching the previous theme */
+      /* Base body styles */
       body {
         margin: 0;
         font-family: 'Roboto', sans-serif;
-        /* Replace with your event's background image URL */
-        background: url("src/apl.png") no-repeat center center fixed;
+        /* CHANGED: Django Static Tag for Background */
+        background: url("{% static 'src/apl.png' %}") no-repeat center center fixed;
         background-size: cover;
         color: white;
         min-height: 100vh;
         position: relative;
-        padding-top: 120px; /* Space for fixed navbar */
+        padding-top: 120px;
         z-index: 1;
       }
 
@@ -50,7 +45,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.7); /* Darker overlay */
+        background-color: rgba(0, 0, 0, 0.7);
         z-index: -1;
       }
       
@@ -142,21 +137,18 @@
       .qr-image-protection {
         width: 100%;
         max-width: 300px;
-        height: 300px; /* Fixed height for background image method */
+        height: 300px;
         border-radius: 8px;
         border: 5px solid white;
         box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
         
-        /* === HARDCODED QR CODE URL (Replace this with your actual QR code image URL) === */
-        background-image: url("QR/qrapl.jpeg"); 
+        /* === CHANGED: Django Static Tag for QR === */
+        background-image: url("{% static 'QR/qrapl.jpeg' %}"); 
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
         
-        /* === MOBILE DETERRENT: Disabling touch interaction/long-press menu === */
         pointer-events: none;
-        
-        /* Disable dragging the background image */
         user-select: none;
         -webkit-user-drag: none;
       }
@@ -170,10 +162,10 @@
       /* Google Form Iframe */
       .form-iframe {
         width: 100%;
-        height: 1000px; /* Adjust height as needed for your form content */
+        height: 1000px;
         border: none;
         border-radius: 15px;
-        background: white; /* Form background */
+        background: white;
       }
 
       /* Responsive Adjustments */
@@ -184,27 +176,24 @@
         .glass-panel h2 { font-size: 32px; }
         .step-header { font-size: 24px; }
         .form-iframe { height: 700px; }
-        .qr-image-protection { height: 250px; } /* Adjusted height for mobile */
+        .qr-image-protection { height: 250px; }
       }
       
-      /* Global CSS to disable text selection/copying in the whole QR section */
       .qr-no-copy {
-        user-select: none; /* Standard syntax */
-        -moz-user-select: none; /* Firefox */
-        -webkit-user-select: none; /* Chrome, Safari, and Opera */
-        -ms-user-select: none; /* IE/Edge */
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
       }
     </style>
   </head>
 
   <body class="lenis lenis-smooth">
-    <!-- Navbar (Simplified for Registration Page) -->
     <nav class="navbar navbar-expand-lg fixed-top">
       <div class="container">
         <a class="navbar-brand" href="#">APL Registration</a>
         <ul class="navbar-nav ms-auto">
-            <!-- UPDATED: Set href to auction.html -->
-            <li class="nav-item"><a class="nav-link" href="auction.html" id="back-link">Back to Event Page</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'auction' %}" id="back-link">Back to Event Page</a></li>
         </ul>
       </div>
     </nav>
@@ -213,7 +202,6 @@
       <div class="glass-panel" data-aos="fade-up">
         <h2>Secure Your Spot: Registration Checklist</h2>
         
-        <!-- === STEP 1: PAYMENT QR CODE (PROTECTED SECTION) === -->
         <div data-aos="fade-right" class="qr-no-copy">
           <h3 class="step-header">
             <span class="step-number">1</span> Complete Payment (Fee: 100/-)
@@ -223,10 +211,6 @@
           </p>
           
           <div class="qr-container">
-            <!-- 
-            The QR Code is now loaded as a background image on a <div>
-            The URL is hardcoded in the CSS above.
-            -->
             <div 
               class="qr-image-protection"
               id="qr-image-protection"
@@ -239,11 +223,9 @@
             </p>
           </div>
         </div>
-        <!-- === END OF STEP 1 === -->
 
         <hr class="my-5 border-light opacity-25">
 
-        <!-- === STEP 2: FORM SUBMISSION === -->
         <div data-aos="fade-left">
           <h3 class="step-header">
             <span class="step-number">2</span> Submit Details & Documents
@@ -252,14 +234,7 @@
             Fill out the form below. Ensure you have your Student ID Card photo and the Payment Screenshot ready for upload.
           </p>
           
-          <!-- Google Form Embed -->
           <div class="mt-4">
-            <!-- 
-            IMPORTANT: 
-            1. Create your Google Form with the necessary fields: Name, Student ID, Email, Phone, 
-               **File Upload (ID Card Picture)**, **File Upload (Payment Screenshot)**.
-            2. Get the IFRAME embed code from your Google Form and paste the 'src' URL below. 
-            -->
             <iframe 
               class="form-iframe"
               src="https://forms.gle/ZaZ8QvsgsJuyaFg46"
@@ -275,52 +250,32 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-      // State variable to track if the user has started interacting with the page/form
       let isFormDirty = false;
-
-      // Listen for any keypress or click event to mark the form as 'dirty' (in progress)
       document.addEventListener('click', () => { isFormDirty = true; }, { once: true });
       document.addEventListener('keypress', () => { isFormDirty = true; }, { once: true });
       
-      // Function to handle the beforeunload event (when the user tries to leave the page)
       const preventExit = (e) => {
         if (isFormDirty) {
-          // Cancel the event (browser standard, necessary for the prompt to appear)
           e.preventDefault(); 
-          // Chrome requires returnValue to be set
           e.returnValue = ''; 
-          // The message is ignored by most modern browsers for security reasons,
-          // but the prompt will still appear.
           return 'You may lose your unsaved registration progress. Are you sure you want to leave?';
         }
       };
 
-      // Add the event listener to the window
       window.addEventListener('beforeunload', preventExit);
 
-      // Add event listener to the "Back to Event Page" link to trigger the warning and redirect
       document.getElementById('back-link').addEventListener('click', function(event) {
         if (isFormDirty) {
-          // 1. Stop the default navigation (to auction.html) immediately.
           event.preventDefault(); 
-          
           const confirmationMessage = 'You have unsaved changes in the registration form. Do you want to continue navigating away?';
-          
-          // 2. Ask for confirmation.
           if (window.confirm(confirmationMessage)) {
-            // 3. If confirmed (OK), manually redirect to the link's href (auction.html).
             window.location.href = this.href; 
           }
-          // 4. If canceled, event.preventDefault() already stopped the action.
         }
-        // If isFormDirty is false, the link acts normally, navigating to auction.html.
       });
       
-      
-      // Initialize AOS for animations
       AOS.init({ duration: 1000, once: true });
       
-      // Initialize Lenis for smooth scrolling
       const lenis = new Lenis();
       function raf(time) { 
         lenis.raf(time); 

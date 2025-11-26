@@ -9,7 +9,7 @@
   <style>
     @font-face {
       font-family: 'Yourmate';
-      /* CHANGED: Django Static Tag */
+      /* FIXED: Linked to static font */
       src: url("{% static 'font/Yourmate.ttf' %}") format('truetype');
       font-weight: normal;
       font-style: normal;
@@ -52,7 +52,7 @@
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      /* CHANGED: Django Static Tag */
+      /* FIXED: Linked to static image */
       background: url("{% static 'src/pp.png' %}") center/cover no-repeat;
       opacity: 0.3;
       z-index: -1;
@@ -154,7 +154,7 @@
         margin-bottom: 15px;
     }
     .coordinator-card h4 {
-        font-family: '', sans-serif;
+        font-family: 'Yourmate', sans-serif;
         font-size: 1.8rem;
         margin-bottom: 5px;
     }
@@ -273,12 +273,11 @@
   <nav>
     <div class="logo">Management Sapiens</div>
     <div class="nav-links">
-      <a href="{% url 'home' %}">Main Page</a>
       <a href="{% url 'management_sapiens' %}">Home</a>
       <a href="{% url 'select' %}">Events</a>
       <a href="{% url 'madteam' %}">Team</a>
       <a href="{% url 'contact' %}" style="color: #f4e48b;">Contact</a>
-
+      
       {% if user.is_authenticated %}
         <span style="color: #f4e48b; margin-left: 20px; font-weight: bold;">Hi, {{ user.first_name }}</span>
         <form action="{% url 'account_logout' %}" method="post" style="display:inline;">
@@ -302,17 +301,17 @@
     <h2 data-aos="fade-up">Faculty Coordinators</h2>
     <div class="coordinators-grid">
         <div class="coordinator-card" data-aos="fade-up" data-aos-delay="100">
-            <img src="faculty/deepikaarora.jpeg" alt="Faculty Coordinator 1" class="coordinator-img">
+            <img src="{% static 'faculty/deepikaarora.jpeg' %}" alt="Faculty Coordinator 1" class="coordinator-img">
             <h4>Prof. Deepika Arora</h4>
             <p>Department of Management</p>
         </div>
         <div class="coordinator-card" data-aos="fade-up" data-aos-delay="200">
-            <img src="faculty/deepalisaluja" alt="Faculty Coordinator 2" class="coordinator-img">
+            <img src="{% static 'faculty/deepalisaluja.jpeg' %}" alt="Faculty Coordinator 2" class="coordinator-img">
             <h4>Dr. Deepali Saluja</h4>
             <p>Department of Management</p>
         </div>
         <div class="coordinator-card" data-aos="fade-up" data-aos-delay="300">
-            <img src="faculty/amitapathania.jpeg" alt="Faculty Coordinator 3" class="coordinator-img">
+            <img src="{% static 'faculty/amitapathania.jpeg' %}" alt="Faculty Coordinator 3" class="coordinator-img">
             <h4>Prof. Amita Pathania</h4>
             <p>Department of Management</p>
         </div>
@@ -339,25 +338,25 @@
 </div>
 
 
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
-  <script>
-    AOS.init({ duration: 1000, once: true });
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
+  <script>
+    AOS.init({ duration: 1000, once: true });
 
-    const lenis = new Lenis();
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-    
-    // Hamburger Menu Script
-    const hamburger = document.querySelector('.hamburger');
-    const navLinks = document.querySelector('.nav-links');
-    hamburger.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
-        hamburger.classList.toggle('active');
-    });
-  </script>
+    const lenis = new Lenis();
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+    
+    // Hamburger Menu Script
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
+    hamburger.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        hamburger.classList.toggle('active');
+    });
+  </script>
 </body>
 </html>

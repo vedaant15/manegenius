@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -5,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BrandPlay Registration - Secure Your Spot!</title>
 
-    <!-- External CSS/JS dependencies -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -16,11 +16,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500&family=Roboto:wght@400&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@studio-freight/lenis"></script>
     
-    <!-- NOTE: Firebase logic removed to fix the TypeError: t is not a function error. 
-    The QR code is now set via CSS. To change the QR code, update the URL in the .qr-image-protection style below. 
-    If you need secure, dynamic loading, please try hosting the file on a different environment. 
-    -->
-
     <style>
       /* Smooth scrolling setup */
       .lenis.lenis-smooth { scroll-behavior: auto !important; }
@@ -32,8 +27,8 @@
       body {
         margin: 0;
         font-family: 'Roboto', sans-serif;
-        /* Replace with your event's background image URL */
-        background: url("src/brandplay.png") no-repeat center center fixed;
+        /* CHANGED: Django Static Tag for Background */
+        background: url("{% static 'src/brandplay.png' %}") no-repeat center center fixed;
         background-size: cover;
         color: white;
         min-height: 100vh;
@@ -147,8 +142,8 @@
         border: 5px solid white;
         box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
         
-        /* === HARDCODED QR CODE URL (Replace this with your actual QR code image URL) === */
-        background-image: url("QR/qrbrandplay.jpeg"); 
+        /* === CHANGED: Django Static Tag for QR Code === */
+        background-image: url("{% static 'QR/qrbrandplay.jpeg' %}"); 
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
@@ -198,13 +193,11 @@
   </head>
 
   <body class="lenis lenis-smooth">
-    <!-- Navbar (Simplified for Registration Page) -->
     <nav class="navbar navbar-expand-lg fixed-top">
       <div class="container">
         <a class="navbar-brand" href="#">BrandPlay Registration</a>
         <ul class="navbar-nav ms-auto">
-            <!-- FIX 1: Set href to brandplay.html -->
-            <li class="nav-item"><a class="nav-link" href="brandplay.html" id="back-link">Back to Event Page</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'brandplay' %}" id="back-link">Back to Event Page</a></li>
         </ul>
       </div>
     </nav>
@@ -213,7 +206,6 @@
       <div class="glass-panel" data-aos="fade-up">
         <h2>Secure Your Spot: Registration Checklist</h2>
         
-        <!-- === STEP 1: PAYMENT QR CODE (PROTECTED SECTION) === -->
         <div data-aos="fade-right" class="qr-no-copy">
           <h3 class="step-header">
             <span class="step-number">1</span> Complete Payment (Fee: 100/-)
@@ -223,10 +215,6 @@
           </p>
           
           <div class="qr-container">
-            <!-- 
-            The QR Code is now loaded as a background image on a <div>
-            The URL is hardcoded in the CSS above.
-            -->
             <div 
               class="qr-image-protection"
               id="qr-image-protection"
@@ -239,11 +227,8 @@
             </p>
           </div>
         </div>
-        <!-- === END OF STEP 1 === -->
-
         <hr class="my-5 border-light opacity-25">
 
-        <!-- === STEP 2: FORM SUBMISSION === -->
         <div data-aos="fade-left">
           <h3 class="step-header">
             <span class="step-number">2</span> Submit Details & Documents
@@ -252,14 +237,7 @@
             Fill out the form below. Ensure you have your Student ID Card photo and the Payment Screenshot ready for upload.
           </p>
           
-          <!-- Google Form Embed -->
           <div class="mt-4">
-            <!-- 
-            IMPORTANT: 
-            1. Create your Google Form with the necessary fields: Name, Student ID, Email, Phone, 
-               **File Upload (ID Card Picture)**, **File Upload (Payment Screenshot)**.
-            2. Get the IFRAME embed code from your Google Form and paste the 'src' URL below. 
-            -->
             <iframe 
               class="form-iframe"
               src="https://forms.gle/ctcB3UT6JoRbiCYt7"
@@ -301,21 +279,20 @@
       // Add event listener to the "Back to Event Page" link to trigger the warning and redirect
       document.getElementById('back-link').addEventListener('click', function(event) {
         if (isFormDirty) {
-          // 1. Stop the default navigation (to brandplay.html) immediately.
+          // 1. Stop the default navigation immediately.
           event.preventDefault(); 
           
           const confirmationMessage = 'You have unsaved changes in the registration form. Do you want to continue navigating away?';
           
           // 2. Ask for confirmation.
           if (window.confirm(confirmationMessage)) {
-            // FIX 2: Correctly redirect by accessing the href property
+            // 3. If confirmed (OK), manually redirect to the link's href (Django URL).
             window.location.href = this.href; 
           }
           // 4. If canceled, event.preventDefault() already stopped the action.
         }
-        // If isFormDirty is false, the link acts normally, navigating to brandplay.html.
+        // If isFormDirty is false, the link acts normally.
       });
-      
       
       // Initialize AOS for animations
       AOS.init({ duration: 1000, once: true });
